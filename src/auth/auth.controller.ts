@@ -1,11 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { RegisterDto } from '../common/interfaces/register.dto';
 import { Auth } from './decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
 import { ActiveUser } from 'src/common/decorators/active-user.decorator';
 import { IActiveUser } from 'src/common/interfaces/active-user.interface';
+import { UpdateUserDto } from 'src/common/interfaces/update-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -25,5 +26,14 @@ export class AuthController {
   @Get('profile')
   async profile(@ActiveUser() user: IActiveUser) {
     return await this.authService.profile(user);
+  }
+
+  @Auth(Role.USER)
+  @Patch('profile')
+  async updateProfile(
+    @ActiveUser() user: IActiveUser,
+    @Body() payload: UpdateUserDto,
+  ) {
+    return await this.authService.updateProfile(user, payload);
   }
 }
