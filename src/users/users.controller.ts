@@ -15,7 +15,15 @@ import { UpdateUserDto } from 'src/common/dto/update-user.dto';
 import { RegisterDto } from 'src/common/dto/register.dto';
 import { ActiveUser } from 'src/common/decorators/active-user.decorator';
 import { IActiveUser } from 'src/common/interfaces/active-user.interface';
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
+@ApiTags('Users')
+@ApiBearerAuth()
+@ApiUnauthorizedResponse({ description: 'Unauthorized bearer auth' })
 @Auth(Role.ADMIN)
 @Controller('users')
 export class UsersController {
