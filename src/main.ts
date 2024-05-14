@@ -15,6 +15,9 @@ async function bootstrap() {
       whitelist: true, // verificar que se envie el body correctp de acuerdo al dt
       forbidNonWhitelisted: true, // tirar error al cliente si intenta mandar otra cosa en el body
       transform: true, // transforem automaticamente los datos siempre que pueda (Params)
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 

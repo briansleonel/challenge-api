@@ -94,6 +94,8 @@ export class UsersService {
   }
 
   async remove(id: string) {
+    await this.findOne(id);
+    
     try {
       const user = await this.userRepository.delete({ id });
 
