@@ -4,6 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +15,12 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const user = await this.userRepository.save(createUserDto);
+      const passwordHashed = await bcrypt.hash(createUserDto.password, 10);
+
+      const user = await this.userRepository.save({
+        ...createUserDto,
+        password: passwordHashed,
+      });
 
       if (!user) {
         throw new BadRequestException('User could not be registered');
@@ -27,7 +33,11 @@ export class UsersService {
   }
 
   async findAll() {
-    return `This action returns all users`;
+    try {
+      return await this.userRepository.find();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async findOne(id: string) {
