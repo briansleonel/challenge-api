@@ -44,16 +44,20 @@ export class UsersService {
     }
   }
 
+  async findOneByEmail(email: string) {
+    try {
+      return await this.userRepository.findOneBy({ email });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
   async findOneByEmailWithPassword(email: string) {
     try {
       const user = await this.userRepository.findOne({
         where: { email },
         select: ['id', 'firstName', 'lastName', 'password', 'role'],
       });
-
-      if (!user) {
-        throw new BadRequestException('User not found');
-      }
 
       return user;
     } catch (error) {

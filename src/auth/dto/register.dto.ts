@@ -18,7 +18,7 @@ export class RegisterDto {
 
   @Transform(({ value }) => value.trim()) // quito espacios en blanco
   @IsString()
-  @MinLength(6)
+  @MinLength(8)
   password: string;
 
   @IsOptional()

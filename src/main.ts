@@ -8,6 +8,8 @@ async function bootstrap() {
 
   app.use(morgan('dev')); // implementar logger http
 
+  app.setGlobalPrefix('api');
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // verificar que se envie el body correctp de acuerdo al dt
