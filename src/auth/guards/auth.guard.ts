@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IPayloadToken } from '../interfaces/auth.interface';
-import { jwtConstanst } from 'src/constants/jwt.constants';
+import { jwtConstanst } from 'src/common/constants/jwt.constants';
 import { RequestWithUser } from '../interfaces/request.user';
 
 @Injectable()
