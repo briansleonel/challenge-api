@@ -11,9 +11,9 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
+import { ProductQueryDto } from './dto/query-products.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -26,8 +26,8 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(@Query() pagination: PaginationQueryDto) {
-    return this.productsService.findAll(pagination);
+  findAll(@Query() productQuery: ProductQueryDto) {
+    return this.productsService.findAll(productQuery);
   }
 
   @Get(':id')

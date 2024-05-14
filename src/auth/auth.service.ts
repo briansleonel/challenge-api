@@ -9,10 +9,10 @@ import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { IBasePayloadToken } from './interfaces/auth.interface';
-import { RegisterDto } from '../common/interfaces/register.dto';
+import { RegisterDto } from '../common/dto/register.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { IActiveUser } from 'src/common/interfaces/active-user.interface';
-import { UpdateUserDto } from 'src/common/interfaces/update-user.dto';
+import { UpdateUserDto } from 'src/common/dto/update-user.dto';
 
 @Injectable()
 export class AuthService {

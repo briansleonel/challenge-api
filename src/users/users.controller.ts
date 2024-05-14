@@ -11,8 +11,8 @@ import {
 import { UsersService } from './users.service';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
-import { UpdateUserDto } from 'src/common/interfaces/update-user.dto';
-import { RegisterDto } from 'src/common/interfaces/register.dto';
+import { UpdateUserDto } from 'src/common/dto/update-user.dto';
+import { RegisterDto } from 'src/common/dto/register.dto';
 import { ActiveUser } from 'src/common/decorators/active-user.decorator';
 import { IActiveUser } from 'src/common/interfaces/active-user.interface';
 

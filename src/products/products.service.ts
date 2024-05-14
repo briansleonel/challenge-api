@@ -7,8 +7,10 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from './entities/product.entity';
-import { Repository } from 'typeorm';
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { Like, Repository } from 'typeorm';
+import { IPageMetadata } from 'src/common/interfaces/page-meta.interface';
+import { IPagination } from 'src/common/interfaces/pagination.interface';
+import { ProductQueryDto } from './dto/query-products.dto';
 
 @Injectable()
 export class ProductsService {
@@ -31,10 +33,19 @@ export class ProductsService {
     }
   }
 
-  async findAll({ limit = 2, page = 1 }: PaginationQueryDto) {
-    const offset = (page - 1) * limit;
+  async findAll(
+    productQuery: ProductQueryDto,
+  ): Promise<IPagination<ProductEntity>> {
     try {
-      return await this.productRepository.find({ skip: offset, take: limit });
+      const [products, count] = await this.filterProducts(productQuery);
+
+      const pageMetadata = this.getPaginationMetadata(
+        productQuery.page,
+        productQuery.limit,
+        count,
+      );
+
+      return { data: products, pagination: pageMetadata };
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -85,5 +96,40 @@ export class ProductsService {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  async filterProducts({ limit, order, page, text }: ProductQueryDto) {
+    const offset = (page - 1) * limit;
+
+    try {
+      return await this.productRepository.findAndCount({
+        skip: offset,
+        take: limit,
+        order: { updatedAt: order },
+        where: [
+          { name: Like(`%${text}%`) },
+          { description: Like(`%${text}%`) },
+        ],
+      });
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  getPaginationMetadata(
+    page: number,
+    limit: number,
+    count: number,
+  ): IPageMetadata {
+    const totalPages = Math.ceil(count / limit);
+
+    return {
+      page,
+      limit,
+      totalItems: count,
+      totalPages,
+      hasPrevPage: page > 1,
+      hasNextPage: totalPages > page,
+    };
   }
 }

@@ -3,8 +3,8 @@ import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { UpdateUserDto } from 'src/common/interfaces/update-user.dto';
-import { RegisterDto } from 'src/common/interfaces/register.dto';
+import { UpdateUserDto } from 'src/common/dto/update-user.dto';
+import { RegisterDto } from 'src/common/dto/register.dto';
 
 @Injectable()
 export class UsersService {
@@ -95,7 +95,7 @@ export class UsersService {
 
   async remove(id: string) {
     await this.findOne(id);
-    
+
     try {
       const user = await this.userRepository.delete({ id });
 
