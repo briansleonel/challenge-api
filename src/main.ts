@@ -8,7 +8,7 @@ import { ResponseInterceptor } from './common/interceptors/response/response.int
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(morgan('common')); // implementar logger http
+  app.use(morgan('dev')); // implementar logger http
 
   app.setGlobalPrefix('api');
 

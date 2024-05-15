@@ -4,6 +4,7 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
+import { LangchainModule } from './langchain/langchain.module';
 import databaseConfig from './config/database.config';
 
 @Module({
@@ -17,6 +18,7 @@ import databaseConfig from './config/database.config';
     DatabaseModule,
     AuthModule,
     ProductsModule,
+    LangchainModule,
   ],
   controllers: [],
   providers: [],
