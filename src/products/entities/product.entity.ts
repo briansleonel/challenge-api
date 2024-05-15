@@ -14,4 +14,7 @@ export class ProductEntity extends BaseEntity {
 
   @Column({ type: 'int' })
   stock: number;
+
+  @Column()
+  image: string;
 }

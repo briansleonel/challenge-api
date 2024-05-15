@@ -19,9 +19,12 @@ export class ProductsService {
     private readonly productRepository: Repository<ProductEntity>,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, imagePath: string) {
     try {
-      const product = await this.productRepository.save(createProductDto);
+      const product = await this.productRepository.save({
+        ...createProductDto,
+        image: imagePath,
+      });
 
       if (!product) {
         throw new BadRequestException('Product could not be saved');

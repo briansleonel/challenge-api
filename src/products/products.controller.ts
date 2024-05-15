@@ -7,6 +7,10 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
+  UploadedFile,
+  Req,
+  BadRequestException,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -17,6 +21,7 @@ import { ProductQueryDto } from './dto/query-products.dto';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiOkResponse,
@@ -25,6 +30,9 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { ResponseMessage } from 'src/common/decorators/response-message.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Request } from 'express';
+import { storageProducts } from 'src/config/multer/storage-products.config';
 
 @ApiTags('Products')
 @Controller('products')
@@ -42,8 +50,21 @@ export class ProductsController {
   @ApiBadRequestResponse({ description: 'Bad request' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized auth' })
   @ResponseMessage('Product successfully created')
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  @UseInterceptors(FileInterceptor('file', { storage: storageProducts }))
+  @ApiConsumes('multipart/form-data')
+  create(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request,
+  ) {
+    if (!file) {
+      throw new BadRequestException('You must send an image of the product');
+    }
+
+    const serverUrl = req.protocol + '://' + req.get('host');
+    const imagePath = `${serverUrl}/products/${file.filename}`;
+
+    return this.productsService.create(createProductDto, imagePath);
   }
 
   @ApiOperation({ summary: 'Get filtered and paginated products' })
