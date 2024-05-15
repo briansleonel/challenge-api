@@ -27,4 +27,7 @@ export class CreateProductDto {
   @IsInt()
   @IsPositive()
   stock: number;
+
+  @ApiProperty({ type: 'file' })
+  file: Express.Multer.File;
 }
