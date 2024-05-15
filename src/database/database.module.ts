@@ -9,7 +9,7 @@ import databaseConfig from 'src/config/database.config';
     TypeOrmModule.forRootAsync({
       inject: [databaseConfig.KEY],
       useFactory: function (dbConfig: ConfigType<typeof databaseConfig>) {
-        const { database, host, password, port, username } = dbConfig;
+        const { database, host, password, port, username, ssl } = dbConfig;
         return {
           type: 'postgres',
           host,
@@ -19,6 +19,8 @@ import databaseConfig from 'src/config/database.config';
           password,
           synchronize: true,
           autoLoadEntities: true,
+          ssl,
+          extra: { ssl: ssl ? { rejectUnauthorized: false } : null },
         };
       },
     }),
