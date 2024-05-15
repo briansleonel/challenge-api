@@ -1,6 +1,6 @@
 import { IPageMetadata } from './page-meta.interface';
 
 export interface IPagination<T> {
-  data: Array<T>;
+  result: Array<T>;
   pagination: IPageMetadata;
 }

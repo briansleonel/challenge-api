@@ -45,7 +45,7 @@ export class ProductsService {
         count,
       );
 
-      return { data: products, pagination: pageMetadata };
+      return { result: products, pagination: pageMetadata };
     } catch (error) {
       throw new BadRequestException(error.message);
     }

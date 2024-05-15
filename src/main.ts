@@ -3,11 +3,12 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as morgan from 'morgan';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ResponseInterceptor } from './common/interceptors/response/response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(morgan('dev')); // implementar logger http
+  app.use(morgan('common')); // implementar logger http
 
   app.setGlobalPrefix('api');
 
@@ -21,6 +22,8 @@ async function bootstrap() {
       },
     }),
   );
+
+  app.useGlobalInterceptors(new ResponseInterceptor());
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Challenge API')
@@ -38,6 +41,8 @@ async function bootstrap() {
 
   SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
+
+  console.log(`Server started on: ${await app.getUrl()}`);
 }
 bootstrap();
